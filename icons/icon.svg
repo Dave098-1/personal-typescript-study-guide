@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#2c66c4"/>
+  <rect x="300" y="300" width="148" height="148" rx="28" fill="#f0d23a"/>
+  <text x="200" y="300" text-anchor="middle" font-family="Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-weight="700" font-size="200" fill="#ffffff">{}</text>
+  <text x="374" y="412" text-anchor="middle" font-family="Helvetica, Arial, 'DejaVu Sans', sans-serif" font-weight="700" font-size="92" fill="#2a2405">TS</text>
+</svg>

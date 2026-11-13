@@ -695,4 +695,12 @@ shelf.forEach((b) => console.log(describe(b)));
     });
   });
   route();
+
+  // Offline support: when served over http(s), a service worker caches the whole site.
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && !window.STUDY_SINGLE_FILE) {
+    navigator.serviceWorker.register("sw.js").then(() => navigator.serviceWorker.ready).then(() => {
+      const s = document.getElementById("offline-status");
+      if (s) s.textContent = "This site is saved on this device and works offline.";
+    }).catch(() => {});
+  }
 })();

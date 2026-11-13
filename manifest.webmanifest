@@ -1,0 +1,15 @@
+{
+  "name": "Four Weeks to TypeScript",
+  "short_name": "4 Weeks to TS",
+  "description": "Learn JavaScript, then TypeScript, in four weeks.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f5fa",
+  "theme_color": "#2c66c4",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

@@ -3,8 +3,7 @@
 (function () {
   "use strict";
 
-  const TS_VERSION = "5.6.3";
-  const TS_URL = `https://cdn.jsdelivr.net/npm/typescript@${TS_VERSION}/lib/typescript.js`;
+  const TS_URL = "vendor/typescript.min.js";
 
   // ---------------------------------------------------------------------------
   // Everything inside `core` runs inside the worker (or inline as a fallback).
@@ -242,7 +241,7 @@ self.addEventListener("unhandledrejection", (e) => { e.preventDefault(); const r
   function loadTS() {
     if (!tsPromise) {
       const libsSrc = (window.STUDY_BASE || "") + "vendor/ts-libs.js";
-      tsPromise = Promise.all([window.ts ? null : loadScript(TS_URL), window.TS_LIBS ? null : loadScript(libsSrc)]).then(() => {
+      tsPromise = Promise.all([window.ts ? null : loadScript((window.STUDY_BASE || "") + TS_URL), window.TS_LIBS ? null : loadScript(libsSrc)]).then(() => {
         if (!window.ts || !window.TS_LIBS) throw new Error("TypeScript failed to load");
         return window.ts;
       });
@@ -323,12 +322,12 @@ declare function structuredClone<T>(value: T): T;
     let js = code;
     let typeErrors = [];
     if (lang === "ts") {
-      onEvent({ type: "status", text: window.ts ? "Checking types…" : "Loading the TypeScript compiler (first run only)…" });
+      onEvent({ type: "status", text: window.ts ? "Checking types…" : "Starting the TypeScript compiler (first run only)…" });
       let ts;
       try {
         ts = await loadTS();
       } catch (e) {
-        onEvent({ type: "error", text: "Could not load the TypeScript compiler. Check your internet connection and try again." });
+        onEvent({ type: "error", text: "Could not load the TypeScript compiler. Reload the page and try again." });
         return { results: [], crashed: true, typeErrors: [], loadFailed: true };
       }
       typeErrors = typeCheck(ts, code);

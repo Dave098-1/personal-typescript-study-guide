@@ -21,12 +21,23 @@ There's also a **Playground** for trying JavaScript or TypeScript freely. Progre
 
 ## Opening the site
 
-It's a static site with no build step needed to use it.
+It's a static site with no build step needed to use it, and everything it needs (the code editor and the TypeScript compiler) is included, so it works without internet.
 
 - **Locally:** open `index.html` in a browser. (Or run `npm run serve` and open the address it prints.)
-- **GitHub Pages:** in the repository's *Settings → Pages*, choose *Deploy from a branch*, pick the branch and the `/ (root)` folder. The site appears at `https://<user>.github.io/personal-typescript-study-guide/`.
+- **GitHub Pages:** in the repository's *Settings → Pages*, choose *Deploy from a branch*, pick the branch and the `/ (root)` folder. The site appears at `https://<user>.github.io/personal-typescript-study-guide/`. (Pages is free for public repositories.)
 
-An internet connection is needed for the code editor (CodeMirror) and the TypeScript compiler, which load from the jsDelivr CDN. Without it, the editors fall back to plain text boxes and JavaScript still runs.
+## Using it offline on a phone
+
+**Option 1: install it (iPhone and Android).** Open the GitHub Pages address once while online. The footer says *"This site is saved on this device and works offline"* when everything is cached. Then:
+
+- iPhone (Safari): Share button → **Add to Home Screen**.
+- Android (Chrome): ⋮ menu → **Add to Home screen** / **Install app**.
+
+Open it from the home-screen icon; it works in airplane mode.
+
+**Option 2: a single file (best on Android).** `offline/four-weeks-to-typescript.html` is the whole site in one 4 MB file. Save it to the phone and open it with Chrome. On iPhone the Files app previews HTML without running JavaScript, so use option 1 there.
+
+Progress is saved separately in each copy (the installed site, the single file, a desktop browser).
 
 ## How it works
 
@@ -51,4 +62,4 @@ npm install
 npm run build
 ```
 
-This writes `js/lessons.data.js` and `vendor/ts-libs.js` (the TypeScript standard library types used for type-checking).
+This writes `js/lessons.data.js`, the bundled editor and compiler in `vendor/`, the offline service worker `sw.js`, and the single-file version in `offline/`.
