@@ -1,0 +1,26 @@
+{
+  "name": "personal-typescript-study-guide",
+  "version": "1.0.0",
+  "description": "A 4-week study guide that teaches JavaScript from zero, then TypeScript, with guides, interactive slides and runnable exercises.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "npx --yes serve ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dave098-1/personal-typescript-study-guide.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dave098-1/personal-typescript-study-guide/issues"
+  },
+  "homepage": "https://github.com/Dave098-1/personal-typescript-study-guide#readme",
+  "devDependencies": {
+    "codemirror": "5.65.16",
+    "marked": "12.0.2",
+    "typescript": "5.6.3"
+  },
+  "private": true
+}
