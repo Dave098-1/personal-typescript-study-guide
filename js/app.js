@@ -14,13 +14,20 @@
 
   // ---------------------------------------------------------------- state
   const KEY = "ts-study-guide-v1";
-  let state = { done: {}, passed: {}, code: {}, slide: {}, mode: "guide", play: null };
+  let state = { done: {}, passed: {}, code: {}, stamps: {}, slide: {}, mode: "guide", play: null };
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || "null");
     if (saved) state = Object.assign(state, saved);
   } catch (e) { /* storage unavailable */ }
   let saveTimer = null;
-  function save() {
+  // Record when a piece of progress changed, so syncing can keep the newest version.
+  function stamp(kind, id) {
+    if (!state.stamps) state.stamps = {};
+    state.stamps[`${kind}:${id}`] = Date.now();
+  }
+
+  function save(fromSync) {
+    if (!fromSync && window.Sync) window.Sync.changed();
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
@@ -223,6 +230,7 @@
       outBox.appendChild(list);
       if (allPass) {
         state.passed[ex.id] = true;
+        stamp("passed", ex.id);
         save();
         paintStatus();
         document.dispatchEvent(new CustomEvent("progress"));
@@ -231,6 +239,7 @@
 
     const ed = makeEditor(w.querySelector(".runner-editor"), state.code[ex.id] ?? ex.starter, ex.lang, run, (v) => {
       state.code[ex.id] = v;
+      stamp("code", ex.id);
       save();
     });
     refreshers.add(ed);
@@ -239,6 +248,7 @@
     w.querySelector('[data-act="reset"]').onclick = () => {
       ed.set(ex.starter);
       delete state.code[ex.id];
+      stamp("code", ex.id);
       save();
       outBox.hidden = true;
     };
@@ -431,6 +441,7 @@
     </footer>`);
     f.querySelector('[data-act="done"]').onclick = () => {
       state.done[l.id] = !state.done[l.id];
+      stamp("done", l.id);
       save();
       route();
       if (state.done[l.id] && next) window.scrollTo({ top: document.body.scrollHeight });
@@ -527,6 +538,7 @@
     </section>`);
     end.querySelector('[data-act="done"]').onclick = (e) => {
       state.done[l.id] = true;
+      stamp("done", l.id);
       save();
       e.currentTarget.textContent = "Marked complete ✓";
     };
@@ -654,7 +666,8 @@ shelf.forEach((b) => console.log(describe(b)));
   function route() {
     if (slideKeyHandler) { document.removeEventListener("keydown", slideKeyHandler); slideKeyHandler = null; }
     refreshers.clear();
-    const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
+    let hash = decodeURIComponent(location.hash.replace(/^#/, ""));
+    if (/^(access_token|error|refresh_token)=/.test(hash) || hash.includes("&")) hash = "";
     let view;
     let scrollTop = true;
     if (hash === "playground") view = viewPlayground();
@@ -696,11 +709,33 @@ shelf.forEach((b) => console.log(describe(b)));
   });
   route();
 
-  // Offline support: when served over http(s), a service worker caches the whole site.
-  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && !window.STUDY_SINGLE_FILE) {
-    navigator.serviceWorker.register("sw.js").then(() => navigator.serviceWorker.ready).then(() => {
-      const s = document.getElementById("offline-status");
-      if (s) s.textContent = "This site is saved on this device and works offline.";
-    }).catch(() => {});
+  // The site used to install a service worker for offline use. Remove any left behind.
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister())).catch(() => {});
+    if (window.caches) caches.keys().then((keys) => keys.filter((k) => k.startsWith("fwts-")).forEach((k) => caches.delete(k))).catch(() => {});
   }
+
+  // Interface used by js/sync.js
+  const PROGRESS_KINDS = ["done", "passed", "code"];
+  window.StudyApp = {
+    getProgress() {
+      return JSON.parse(JSON.stringify({ done: state.done, passed: state.passed, code: state.code, stamps: state.stamps || {} }));
+    },
+    applyProgress(p) {
+      const before = JSON.stringify(PROGRESS_KINDS.map((k) => state[k]));
+      for (const k of PROGRESS_KINDS) state[k] = p[k] || {};
+      state.stamps = p.stamps || {};
+      save(true);
+      if (JSON.stringify(PROGRESS_KINDS.map((k) => state[k])) === before) return false;
+      const a = document.activeElement;
+      const typing = a && a.closest && (a.closest(".CodeMirror") || /INPUT|TEXTAREA/.test(a.tagName));
+      if (!typing) {
+        const y = window.scrollY;
+        lastLesson = null;
+        route();
+        window.scrollTo(0, y);
+      }
+      return true;
+    },
+  };
 })();

@@ -21,23 +21,25 @@ There's also a **Playground** for trying JavaScript or TypeScript freely. Progre
 
 ## Opening the site
 
-It's a static site with no build step needed to use it, and everything it needs (the code editor and the TypeScript compiler) is included, so it works without internet.
+It's a static site with no build step needed to use it.
 
-- **Locally:** open `index.html` in a browser. (Or run `npm run serve` and open the address it prints.)
 - **GitHub Pages:** in the repository's *Settings → Pages*, choose *Deploy from a branch*, pick the branch and the `/ (root)` folder. The site appears at `https://<user>.github.io/personal-typescript-study-guide/`. (Pages is free for public repositories.)
+- **Locally:** run `npm run serve` and open the address it prints.
 
-## Using it offline on a phone
+On a phone you can add it to your home screen (Safari: Share → Add to Home Screen; Chrome: ⋮ → Add to Home screen). It needs an internet connection.
 
-**Option 1: install it (iPhone and Android).** Open the GitHub Pages address once while online. The footer says *"This site is saved on this device and works offline"* when everything is cached. Then:
+## Optional accounts (sync across devices)
 
-- iPhone (Safari): Share button → **Add to Home Screen**.
-- Android (Chrome): ⋮ menu → **Add to Home screen** / **Install app**.
+Without an account, progress is saved in the browser. With one, finished sessions, passed exercises and exercise code sync between devices through [Supabase](https://supabase.com). Sign-in is by emailed link, so there are no passwords. Until it's set up, the **Sign in** button stays hidden.
 
-Open it from the home-screen icon; it works in airplane mode.
+To set it up:
 
-**Option 2: a single file (best on Android).** `offline/four-weeks-to-typescript.html` is the whole site in one 4 MB file. Save it to the phone and open it with Chrome. On iPhone the Files app previews HTML without running JavaScript, so use option 1 there.
+1. Create a Supabase project (the free plan is fine).
+2. Run `supabase/migrations/20261114000000_progress.sql` in the project's SQL editor. It creates the `progress` table with row level security, so each person can only read and write their own row.
+3. In *Authentication → URL Configuration*, set **Site URL** to the site's address (for example `https://<user>.github.io/personal-typescript-study-guide/`) and add the same address under **Redirect URLs**. Sign-in links point there.
+4. Put the project URL and publishable key in `js/config.js`. The publishable key is designed to be public.
 
-Progress is saved separately in each copy (the installed site, the single file, a desktop browser).
+If two devices disagree, the most recent change to each item wins, and a passed exercise stays passed. The free plan pauses a project after about a week with no activity (restart it from the dashboard), and its built-in email sends only a few sign-in emails per hour.
 
 ## How it works
 
@@ -62,4 +64,4 @@ npm install
 npm run build
 ```
 
-This writes `js/lessons.data.js`, the bundled editor and compiler in `vendor/`, the offline service worker `sw.js`, and the single-file version in `offline/`.
+This writes `js/lessons.data.js` and the bundled editor, TypeScript compiler and supabase-js in `vendor/`.

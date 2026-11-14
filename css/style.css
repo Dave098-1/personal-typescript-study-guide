@@ -354,11 +354,52 @@ div.CodeMirror span.CodeMirror-matchingbracket { color: var(--code-ink); outline
   .pager { grid-template-columns: 1fr; }
   .brand { font-size: .95rem; }
 }
-@media (max-width: 440px) {
+@media (max-width: 520px) {
   .brand-long { display: none; }
   .brand-short { display: inline; }
+}
+@media (max-width: 440px) {
+  .brand-short { display: none; }
+  .topbar-inner { gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .slide { animation: none; }
   .meter span { transition: none; }
+}
+
+/* ---------- account (optional sign-in and sync) */
+.account-btn {
+  white-space: nowrap; flex: none;
+  font: 600 .9rem var(--font-body); padding: 6px 12px; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); margin-left: 4px;
+}
+.account-btn:hover { background: var(--surface-2); }
+.account-btn.signed-in::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); margin-right: 7px; vertical-align: 1px; }
+.account-btn.signed-in.has-problem::before { background: #c98a1a; }
+.account-panel {
+  position: absolute; top: calc(100% + 6px); right: max(16px, env(safe-area-inset-right, 0px)); z-index: 30;
+  width: min(360px, calc(100vw - 32px)); background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 16px 18px;
+  display: grid; gap: 8px;
+}
+.account-panel p { margin: 0; }
+.acct-title { font: 700 1.05rem var(--font-display); }
+.acct-email { font-weight: 600; word-break: break-all; }
+.acct-status { font-size: .9rem; color: var(--muted); }
+.acct-status.acct-synced { color: var(--ok); }
+.acct-status.acct-error, .acct-status.acct-offline { color: var(--bad); }
+.acct-form { display: grid; gap: 6px; margin-top: 4px; }
+.acct-form label { font-size: .85rem; font-weight: 600; }
+.acct-form input {
+  font: 1rem var(--font-body); padding: 9px 11px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); width: 100%;
+}
+.acct-form input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.acct-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.acct-msg { font-size: .9rem; padding: 8px 10px; border-radius: 8px; }
+.acct-msg-ok { background: var(--ok-soft); color: var(--ok); }
+.acct-msg-bad { background: var(--bad-soft); color: var(--bad); }
+@media (max-width: 440px) {
+  .topnav a { padding: 6px 8px; }
+  .account-btn { padding: 6px 9px; }
 }

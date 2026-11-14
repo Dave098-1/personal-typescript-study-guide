@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Dave098-1/personal-typescript-study-guide#readme",
   "devDependencies": {
+    "@supabase/supabase-js": "^2.45.4",
     "codemirror": "5.65.16",
     "esbuild": "^0.24.0",
     "marked": "12.0.2",

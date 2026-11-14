@@ -26,17 +26,22 @@
     <nav class="topnav" aria-label="Main">
       <a href="#home">Plan</a>
       <a href="#playground">Playground</a>
+      <button type="button" id="account-btn" class="account-btn" aria-haspopup="dialog" aria-expanded="false" hidden>Sign in</button>
     </nav>
+    <div id="account-panel" class="account-panel" role="dialog" aria-label="Account" hidden></div>
   </div>
 </header>
 <main id="app" class="wrap"></main>
 <footer class="site-foot wrap">
-  <p class="muted small">Code runs in your browser. TypeScript is checked and compiled with the official TypeScript compiler. <span id="offline-status"></span></p>
+  <p class="muted small">Code runs in your browser. TypeScript is checked and compiled with the official TypeScript compiler.</p>
 </footer>
 
 <script src="vendor/codemirror.min.js"></script>
 <script src="js/lessons.data.js"></script>
 <script src="js/runner.js"></script>
 <script src="js/app.js"></script>
+<script src="vendor/supabase.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/sync.js"></script>
 </body>
 </html>
